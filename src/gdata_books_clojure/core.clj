@@ -7,6 +7,12 @@
 (def settings (atom {:application-name "unknown"
                      :base-url "http://www.google.com/books/feeds/volumes"}))
 
+(defn set-application-name [name]
+  (swap! settings assoc :application-name name))
+
+(defn application-name []
+  (:application-name @settings))
+
 (defn- url [s] (URL. s))
 
 (defn- in-author [s]
@@ -15,7 +21,7 @@
 (defn- build-author-operators
   "Given an author name, like \"Joe O'Brien King\"
    returns a string like \"inauthor:Joe inauthor:O'Brien inauthor:King\"
-   so we can use google book search advance operators to
+   so we can use google book search advanced operators to
    get books by a specific author."
   [author]
   (let [tokens (split #"\s+" author)
@@ -53,47 +59,157 @@
         query (create-query criteria)]
     (do-query query)))
 
-(defn etag [x] (.getEtag x))
-(defn href [x] (.getHref x))
-(defn rel [x] (.getRel x))
-(defn text [x] (.getText x))
-(defn title [x] (.getTitle x))
-(defn link-type [x] (.getType x))
-(defn value [x] (.getValue x))
-(defn values [xs] (map value xs))
+(defn etag
+  "Get the E-Tag from a link"
+  [link]
+  (.getEtag link))
 
-(defn alternate-links [x] (.getAtomAlternateLinks x))
+(defn href
+  "Get the href from a link"
+  [link]
+  (.getHref link))
 
-(defn comments [x] (.getComments x))
-(defn comments? [x] (.hasComments x))
+(defn rel
+  "Get the rel (relationship) from a link"
+  [link]
+  (.getRel link))
 
-(defn creators? [x] (.hasCreators x))
-(defn creators [x] (values (.getCreators x)))
+(defn text
+  "Get the text from some element x"
+  [x]
+  (.getText x))
 
-(defn descriptions? [x] (.hasDescriptions x))
-(defn descriptions [x] (values (.getDescriptions x)))
+(defn title
+  "Get the title of some element x"
+  [x]
+  (.getTitle x))
 
-(defn entries [x] (.getEntries x))
+(defn link-type
+  "Get the link type from a link"
+  [link]
+  (.getType link))
 
-(defn identifiers? [x] (.hasIdentifiers x))
-(defn identifiers [x] (values (.getIdentifiers x)))
+(defn value
+  "Get the value of some element x"
+  [x]
+  (.getValue x))
 
-(defn languages? [x] (.hasLanguages x))
-(defn languages [x] (values (.getLanguages x)))
+(defn values
+  "Get all the values from some elements"
+  [xs]
+  (map value xs))
 
-(defn publishers? [x] (.hasPublishers x))
-(defn publishers [x] (values (.getPublishers x)))
+(defn alternate-links
+  "Get the atom alternate links from an entry"
+  [x]
+  (.getAtomAlternateLinks x))
 
-(defn rating? [x] (.hasRating x))
-(defn rating [x] (value (.getRating x)))
+(defn comments?
+  "Check to see if an entry has comments"
+  [entry]
+  (.hasComments entry))
 
-(defn review? [x] (.hasReview x))
-(defn review [x] (.getReview x))
+(defn comments
+  "Get the comments from an entry"
+  [entry]
+  (.getComments entry))
 
-(defn subjects? [x] (.hasSubjects x))
-(defn subjects [x] (values (.getSubjects x)))
+(defn creators?
+  "Check to see if an entry has any creators"
+  [entry]
+  (.hasCreators entry))
 
-(defn titles? [x] (.hasTitles x))
-(defn titles [x] (values (.getTitles x)))
+(defn creators
+  "Gets the creators for an entry"
+  [entry]
+  (values (.getCreators entry)))
 
-(defn thumbnail [x] (href (.getThumbnailLink x)))
+(defn descriptions?
+  "Checks to see if an entry has any descriptions"
+  [entry]
+  (.hasDescriptions entry))
+
+(defn descriptions
+  "Gets the descriptions for an entry"
+  [entry]
+  (values (.getDescriptions entry)))
+
+(defn entries
+  "Gets the entries in a feed"
+  [feed]
+  (.getEntries feed))
+
+(defn identifiers?
+  "Checks to see if an entry has any identifiers"
+  [entry]
+  (.hasIdentifiers entry))
+
+(defn identifiers
+  "Gets all the identifiers for an entry"
+  [entry]
+  (values (.getIdentifiers entry)))
+
+(defn languages?
+  "Checks to see if an entry has any languages"
+  [entry]
+  (.hasLanguages entry))
+
+(defn languages
+  "Gets all the languages for an entry"
+  [entry]
+  (values (.getLanguages entry)))
+
+(defn publishers?
+  "Checks to see if an entry has any publishers"
+  [entry]
+  (.hasPublishers entry))
+
+(defn publishers
+  "Gets all the publishers for an entry"
+  [entry]
+  (values (.getPublishers entry)))
+
+(defn rating?
+  "Checks to see if an entry has any rating"
+  [entry]
+  (.hasRating entry))
+
+(defn rating
+  "Gets the rating for an entry"
+  [entry]
+  (value (.getRating entry)))
+
+(defn review?
+  "Checks to see if an entry has any review"
+  [entry]
+  (.hasReview entry))
+
+(defn review
+  "Gets the review for an entry"
+  [entry]
+  (.getReview entry))
+
+(defn subjects?
+  "Checks to see if an entry has any subjects"
+  [entry]
+  (.hasSubjects entry))
+
+(defn subjects
+  "Gets all the subjects for an entry"
+  [entry]
+  (values (.getSubjects entry)))
+
+(defn titles?
+  "Checks to see if an entry has any titles"
+  [entry]
+  (.hasTitles entry))
+
+(defn titles
+  "Gets all the titles for an entry"
+  [entry]
+  (values (.getTitles entry)))
+
+(defn thumbnail
+  "Gets the thumbnail link for an entry"
+  [entry]
+  (href (.getThumbnailLink entry)))

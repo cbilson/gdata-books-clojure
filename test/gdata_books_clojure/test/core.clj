@@ -2,6 +2,12 @@
   (:use [gdata-books-clojure.core] :reload)
   (:use [clojure.test]))
 
+(deftest changing-application-name
+  (let [old-name application-name]
+    (set-application-name "monkey-banana-1.0")
+    (is (not= old-name (application-name)))
+    (is (= "monkey-banana-1.0" (application-name)))))
+
 (defn expect-stranger-in-a-strange-land [book]
   (is (not (comments? book)))
   

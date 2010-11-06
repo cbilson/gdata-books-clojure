@@ -1,5 +1,5 @@
 (defproject gdata-books-clojure "1.0.0-SNAPSHOT"
-  :description "FIXME: write"
+  :description "A clojure friendly wrapper for Google's GData Books API. source: http://github.com/cbilson/gdata-books-clojure.git"
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
                  [com.google.gdata/gdata-books-1.0 "1.41.5"]]
